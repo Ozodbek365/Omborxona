@@ -18,7 +18,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
@@ -32,7 +32,7 @@ class Customer(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
