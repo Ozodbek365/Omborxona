@@ -17,14 +17,14 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <form method="post">
+    <form method="post" class="form-container" style="padding: 20px;">
         {% csrf_token %}
         <label for="confirm-delete">
             {{ product.name }} mahsulotni o'chirishni tasdiqlang!
         </label>
-        <button>O'chirish</button>
+        <button class="col-md-4 form-control">O'chirish</button>
         <a href="{% url 'products' %}">
-            <button>Bekor qilish</button>
+            <button class="col-md-4 form-control" type="button">Bekor qilish</button>
         </a>
     </form>
     </div>

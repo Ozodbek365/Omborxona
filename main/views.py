@@ -1,15 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
+from django.contrib.auth import authenticate, login, logout
 from datetime import datetime
 from .models import *
 
-class HomeView(View):
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
+class HomeView(LoginRequiredMixin,View):
     def get(self, request):
         return render(request,  'sections.html')
 
-class ProductsView(View):
+class ProductsView(LoginRequiredMixin,View):
     def get(self, request):
-        products = Product.objects.order_by('name')
+        products = Product.objects.filter(branch=request.user.branch).order_by('name')
         context = {
             'products': products
         }
@@ -24,19 +29,20 @@ class ProductsView(View):
             amount=request.POST.get('amount'),
             unit=request.POST.get('unit'),
             updated_at=datetime.now(),
+            branch=request.user.branch,
         )
         return self.get(request)
 
-class ProductEditView(View):
+class ProductEditView(LoginRequiredMixin,View):
     def get(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
+        product = get_object_or_404(Product, pk=pk, branch=request.user.branch)
         context = {
             'product': product,
         }
         return render(request, 'product-edit.html', context)
 
     def post(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
+        product = get_object_or_404(Product, pk=pk, branch=request.user.branch)
         product.name = request.POST.get('name')
         product.brand = request.POST.get('brand')
         product.import_price = request.POST.get('import_price')
@@ -44,18 +50,34 @@ class ProductEditView(View):
         product.amount = request.POST.get('amount')
         product.unit = request.POST.get('unit')
         product.updated_at = datetime.now()
+        product.branch=request.user.branch
         product.save()
         return redirect('products')
 
 class ProductDeleteView(View):
     def get(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
-        context = {
-            'product': product
-        }
-        return render(request, 'product-delete.html', context)
+        if request.is_authenticated:
+           product = get_object_or_404(Product, pk=pk, branch=request.user.branch)
+           context = {
+             'product': product
+           }
+           return render(request, 'product-delete.html', context)
+        return redirect('login')
 
     def post(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
-        product.delete()
-        return redirect('products')
+        if request.is_authenticated:
+         product = get_object_or_404(Product, pk=pk, branch=request.user.branch)
+         product.delete()
+         return redirect('products')
+        return redirect('login')
+
+class CustomerView(View):
+    def get(self, request):
+        customer = Customer.objects.filter(branch=request.user.branch).order_by('name')
+        context = {
+            'customer': customer,
+        }
+        return render(request, 'customer.html', context)
+
+    def post(self):
+        pass

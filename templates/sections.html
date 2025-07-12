@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sections</title>
+	<title>Omborxona</title>
 	<style>
         *{
             margin: 0;
@@ -60,18 +60,17 @@
 </head>
 <body>
 	<header>
-		<h1>Sections</h1>
+		<h1>🗂️ Bo'limlar</h1>
 		<nav>
-			<a href="{% url 'products' %}">Mahsulotlar</a>
-			<a href="#">Mijozlar</a>
-			<a href="#">Sotuvlar</a>
-			<a href="{% url 'admin:index' %}">Admin</a>
+			<a href="{% url 'products' %}">Mahsulotlar 🍕</a>
+			<a href="{% url 'customer' %}">Mijozlar 👩🏻‍💼</a>
+			<a href="#">Sotuvlar 💵</a>
 		</nav>
 	</header>
 	<main>
 		<div class="button-container">
 			<a href="{% url 'products' %}" class="button">Mahsulotlar</a>
-			<a href="#" class="button">Mijozlar</a>
+			<a href="{% url 'customer' %}" class="button">Mijozlar</a>
 			<a href="#" class="button">Sotuvlar</a>
 			<a href="#" class="button">Admin</a>
 		</div>
